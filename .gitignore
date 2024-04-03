@@ -66,7 +66,7 @@ yarn-error.log
 /coverage
 
 # Credentials
-credentials.js
+credentials.ts
 ios/HindiGeniusApp/GoogleService-Info.plist
 ios/HindiGeniusApp/Info.plist
 android/app/google-services.json
