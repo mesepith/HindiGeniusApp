@@ -40,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
         dispatch(setUser(response.user));
 
         // Navigate to the desired screen (e.g., ChatScreen)
-        navigation.navigate('ChatScreen');
+        navigation.navigate('Home');
       } else {
         Alert.alert('Registration failed', response.data.message);
       }

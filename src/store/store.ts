@@ -2,6 +2,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './reducers/userReducer';
 
+// Define the RootState type
+export type RootState = ReturnType<typeof store.getState>;
+
 // Create the Redux store using RTK's configureStore
 const store = configureStore({
   reducer: {
