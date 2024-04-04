@@ -9,6 +9,7 @@ import { RootState } from '../store/store';
 import { API_BASE_URL } from '../utils/ApiConstants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 const ChatScreen = () => {
   useRequireAuth(); // This will take care of redirecting to the login screen if the user is not authenticated
@@ -20,6 +21,7 @@ const ChatScreen = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const flatListRef = useRef<FlatList>(null); // Create a reference for the FlatList
   const navigation = useNavigation(); // Use useNavigation to get the navigation prop
+  const [isReadyToScroll, setIsReadyToScroll] = useState(false);
 
   useEffect(() => {
     setIsLoadingMessages(true); // Start loading
@@ -35,6 +37,13 @@ const ChatScreen = () => {
             },
           });
           setMessages(response.data.messages);
+
+          // Add a slight delay to ensure FlatList has updated
+          if (isReadyToScroll) {
+            setTimeout(() => {
+              flatListRef.current?.scrollToEnd({ animated: false });
+            }, 500);
+          }
           
         } catch (error) {
           console.error('Error fetching messages:', error);
@@ -48,7 +57,7 @@ const ChatScreen = () => {
     };
 
     fetchMessages();
-  }, [user]); // Depend on the whole user object instead of just user.id
+  }, [user, isReadyToScroll]); // Depend on the whole user object instead of just user.id
 
   const handleSendMessage = async () => {
     if (message.trim() === '') return;
@@ -90,7 +99,11 @@ const ChatScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0} // Adjust the offset if needed
+    >
 
         {isLoadingMessages ? (
           <View style={styles.loaderContainer}>
@@ -99,13 +112,16 @@ const ChatScreen = () => {
           </View>
         ) : (
         <>
+        <View style={{ flex: 1 }}>
           <FlatList
             ref={flatListRef}
             data={messages}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => <Message message={item.message} response={item.response} />}
-            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
+            onContentSizeChange={() => isReadyToScroll && flatListRef.current?.scrollToEnd({ animated: false })}
+            onLayout={() => setIsReadyToScroll(true)} // Set the flag to true once the layout is ready
           />
+        </View>
 
           <View style={styles.inputContainer}>
             <TextInput
@@ -125,8 +141,7 @@ const ChatScreen = () => {
 
         </>
         )}
-
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -147,6 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginRight: 10,
+    color: '#000',
   },
   loaderContainer: {
     flex: 1,

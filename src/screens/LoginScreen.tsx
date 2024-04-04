@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-
+      
       // Send the user data to the backend for registration
       const userData = {
         name: userInfo.user.name,
@@ -27,10 +27,12 @@ const LoginScreen = ({ navigation }) => {
         google_user_id: userInfo.user.id,
       };
 
+      console.log('userData', userData);
+
       const response = await AuthService.registerWithGoogle(userData);
 
       if (response.success) {
-        console.log('response::')
+        console.log('success response from API::')
         console.log(response);
 
         // Store the token in AsyncStorage
