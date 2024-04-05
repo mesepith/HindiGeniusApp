@@ -1,70 +1,39 @@
+// src/screens/LoginScreen.tsx
 import React from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import axios from 'axios';
-import { GOOGLE_WEB_CLIENT_ID } from '../../credentials';
-import { useDispatch } from 'react-redux';
-import { setUser } from './../store/actions/userActions';
-import AuthService from '../services/AuthService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-});
+import { View, Alert, ActivityIndicator } from 'react-native';
+import CustomButton from '../components/CustomButton';
+import useGoogleSignIn from '../hooks/useGoogleSignIn';
+import { styles } from './LoginScreen.styles';
 
 const LoginScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
+  const { googleSignIn } = useGoogleSignIn();
+  const [loading, setLoading] = React.useState(false);
 
-  const googleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      
-      // Send the user data to the backend for registration
-      const userData = {
-        name: userInfo.user.name,
-        email: userInfo.user.email,
-        google_user_id: userInfo.user.id,
-      };
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    const result = await googleSignIn();
+    setLoading(false);
 
-      console.log('userData', userData);
-
-      const response = await AuthService.registerWithGoogle(userData);
-
-      if (response.success) {
-        console.log('success response from API::')
-        console.log(response);
-
-        // Store the token in AsyncStorage
-        await AsyncStorage.setItem('userToken', response.token);
-
-        // Store the user data in Redux store
-        dispatch(setUser(response.user));
-
-        // Navigate to the desired screen (e.g., ChatScreen)
-        navigation.navigate('Home');
-      } else {
-        Alert.alert('Registration failed', response.data.message);
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'An error occurred during Google Sign-In');
+    if (result.success) {
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('Registration failed', result.message);
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Button title="Login with Google" onPress={googleSignIn} />
+      <CustomButton title="Login with Google" onPress={handleGoogleSignIn} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default LoginScreen;
