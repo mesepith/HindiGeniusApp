@@ -4,8 +4,9 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   button: {
     backgroundColor: '#4285F4', // Google's blue color
-    padding: 10,
-    borderRadius: 5,
+    paddingVertical: 12, // Increase padding for a bigger button
+    paddingHorizontal: 30, // Increase padding for a wider button
+    borderRadius: 10, // Increase for more rounded corners
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -13,10 +14,11 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginTop: 16, // Adjust the margin as needed to move the button down
   },
   text: {
     color: '#FFFFFF', // White color for text
-    fontSize: 16,
+    fontSize: 18, // Increase font size if needed
     fontWeight: 'bold',
   },
 });
