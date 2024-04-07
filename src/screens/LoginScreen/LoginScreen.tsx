@@ -1,8 +1,8 @@
 // src/screens/LoginScreen.tsx
 import React from 'react';
 import { View, Alert, ActivityIndicator } from 'react-native';
-import CustomButton from '../components/CustomButton';
-import useGoogleSignIn from '../hooks/useGoogleSignIn';
+import CustomButton from '../../components/CustomButton';
+import useGoogleSignIn from '../../hooks/useGoogleSignIn';
 import { styles } from './LoginScreen.styles';
 
 const LoginScreen = ({ navigation }) => {

@@ -1,1 +1,3 @@
-export const API_BASE_URL='http://172.20.10.9:5029/api';
+// const ADDRESS = '172.16.4.243';//off
+const ADDRESS = '172.20.10.9';//vi
+export const API_BASE_URL='http://'+ADDRESS+':5029/api';

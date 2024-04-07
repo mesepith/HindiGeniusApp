@@ -3,8 +3,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import LoginScreen from './screens/LoginScreen';
-import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen/LoginScreen';
+import ChatScreen from './screens/ChatScreen/ChatScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
 import TermsAndConditionsScreen from './screens/TermsAndConditionsScreen';
 import { useDispatch } from 'react-redux';
