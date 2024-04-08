@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#4285F4', // Google's blue color
     paddingVertical: 12, // Increase padding for a bigger button
     paddingHorizontal: 30, // Increase padding for a wider button
-    borderRadius: 10, // Increase for more rounded corners
+    borderRadius: 30, // Increase for more rounded corners
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
