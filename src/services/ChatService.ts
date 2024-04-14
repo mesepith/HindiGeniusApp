@@ -7,9 +7,10 @@ interface Message {
 }
 
 const ChatService = {
-  fetchMessages: async (userId: string, token: string | null): Promise<Message[]> => {
+  fetchMessages: async (userId: string, token: string | null, sessionId: string): Promise<Message[]> => {
+    console.log('sessionId inside fetchMessages:', sessionId);
     try {
-      const response = await axios.get(`${API_BASE_URL}/chats/${userId}`, {
+      const response = await axios.get(`${API_BASE_URL}/chats/${userId}/${sessionId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -21,12 +22,13 @@ const ChatService = {
     }
   },
 
-  sendMessage: async (message: string, token: string | null): Promise<string> => {
+  sendMessage: async (message: string, token: string, sessionId: string | null): Promise<string> => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/chats/send`,
         {
           message,
+          sessionId,
         },
         {
           headers: {
@@ -40,6 +42,19 @@ const ChatService = {
       throw error;
     }
   },
+  startNewSession: async (token: string | null) => {
+    try {
+      
+        const response = await axios.get(`${API_BASE_URL}/chats/start-new-session`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('startNewSession sessionId ', response.data.sessionId);
+        return response.data.sessionId;
+    } catch (error) {
+        console.error('Error starting new session:', error);
+        throw error;
+    }
+},
 };
 
 export default ChatService;

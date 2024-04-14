@@ -12,17 +12,26 @@ interface Message {
 const useChat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [sessionId, setSessionId] = useState(''); // Store sessionId here
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const user = useSelector((state: RootState) => state.user.user);
   const flatListRef = useRef<FlatList>(null);
   const isReadyToScroll = useRef(false);
 
-  const fetchMessages = useCallback(async () => {
+  const fetchSessionId = useCallback(async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    const newSessionId = await ChatService.startNewSession(token);
+    setSessionId(newSessionId);  // Set the session ID first
+    setMessages([]);  // Clear old messages for the new session
+    return newSessionId;  // Return the new sessionId to be used in the next promise chain
+}, []);
+
+  const fetchMessages = useCallback(async (sessionId) => {
     try {
-      if (user && user.id) {
+      if (user && user.id && sessionId) {  // Make sure sessionId is not undefined
         const token = await AsyncStorage.getItem('userToken');
-        const fetchedMessages = await ChatService.fetchMessages(user.id, token);
+        const fetchedMessages = await ChatService.fetchMessages(user.id, token, sessionId);
         setMessages(fetchedMessages);
       }
     } catch (error) {
@@ -39,8 +48,10 @@ const useChat = () => {
 
   useEffect(() => {
     setIsLoadingMessages(true);
-    fetchMessages();
-  }, [fetchMessages, user]);
+    fetchSessionId().then(sessionId => {
+        fetchMessages(sessionId);  // Now fetchMessages is called after fetchSessionId is completed
+    });
+}, [fetchMessages, fetchSessionId, user]);
 
   useEffect(() => {
     // Set isReadyToScroll to true after the initial render
@@ -57,7 +68,7 @@ const useChat = () => {
 
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const response = await ChatService.sendMessage(message, token);
+      const response = await ChatService.sendMessage(message, token, sessionId);
       setMessages(currentMessages => [...currentMessages, { message, response }]);
       setMessage('');
 
@@ -79,7 +90,7 @@ const useChat = () => {
     }
   };
 
-  return { message, setMessage, messages, isLoading, isLoadingMessages, handleSendMessage, flatListRef, isReadyToScroll };
+  return { message, setMessage, messages, isLoading, isLoadingMessages, handleSendMessage, fetchSessionId, flatListRef, isReadyToScroll };
 };
 
 export default useChat;

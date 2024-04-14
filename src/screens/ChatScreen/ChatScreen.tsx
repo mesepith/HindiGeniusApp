@@ -5,9 +5,21 @@ import Message from '../../components/Message/Message';
 import useChat from '../../hooks/useChat';
 import styles from './ChatScreen.styles';
 
-const ChatScreen = () => {
+const ChatScreen = ({navigation}) => {
   useRequireAuth();
-  const { message, setMessage, messages, isLoading, isLoadingMessages, handleSendMessage, flatListRef, isReadyToScroll } = useChat();
+  const { message, setMessage, messages, isLoading, isLoadingMessages, handleSendMessage, fetchSessionId, flatListRef, isReadyToScroll } = useChat();
+
+   // Add a header button for new chat on screen focus
+   // Use React.useLayoutEffect to set navigation options
+   // Set navigation options dynamically
+   React.useLayoutEffect(() => {
+    navigation.setOptions({
+        headerRight: () => (
+            <Button onPress={fetchSessionId} title="New Chat" color="#007AFF" />
+        ),
+    });
+}, [navigation, fetchSessionId]);  // Depend on navigation and fetchSessionId to update the header button
+
 
   return (
     <KeyboardAvoidingView 
