@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { View, TextInput, FlatList, Button, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TextInput, FlatList, Button, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import useRequireAuth from '../../hooks/useRequireAuth';
 import Message from '../../components/Message/Message';
 import useChat from '../../hooks/useChat';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 import styles from './ChatScreen.styles';
 
 const ChatScreen = ({navigation}) => {
@@ -15,7 +16,9 @@ const ChatScreen = ({navigation}) => {
    React.useLayoutEffect(() => {
     navigation.setOptions({
         headerRight: () => (
-            <Button onPress={fetchSessionId} title="New Chat" color="#007AFF" />
+          <TouchableOpacity onPress={fetchSessionId} style={{ marginRight: 10 }}>
+            <Ionicons name="chatbubble-ellipses" size={25} color="#007AFF" />
+          </TouchableOpacity>
         ),
     });
 }, [navigation, fetchSessionId]);  // Depend on navigation and fetchSessionId to update the header button
