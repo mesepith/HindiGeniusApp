@@ -57,7 +57,7 @@ const CustomDrawerContent = (props) => {
 
 const DrawerNavigator = () => (
   <Drawer.Navigator initialRouteName="Chat" drawerContent={props => <CustomDrawerContent {...props} />}>
-    <Drawer.Screen name="Chat" component={ChatScreen} />
+    <Drawer.Screen name="Hindi Writer" component={ChatScreen} />
     <Drawer.Screen name="About Us" component={AboutUsScreen} />
     <Drawer.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} />
   </Drawer.Navigator>
