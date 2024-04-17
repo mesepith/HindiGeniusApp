@@ -20,11 +20,14 @@ const useChat = () => {
   const isReadyToScroll = useRef(false);
 
   const fetchSessionId = useCallback(async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    const newSessionId = await ChatService.startNewSession(token);
-    setSessionId(newSessionId);  // Set the session ID first
-    setMessages([]);  // Clear old messages for the new session
-    return newSessionId;  // Return the new sessionId to be used in the next promise chain
+    
+    if (user && user.id && sessionId) {  // Make sure sessionId is not undefined
+      const token = await AsyncStorage.getItem('userToken');
+      const newSessionId = await ChatService.startNewSession(token);
+      setSessionId(newSessionId);  // Set the session ID first
+      setMessages([]);  // Clear old messages for the new session
+      return newSessionId;  // Return the new sessionId to be used in the next promise chain
+    }
 }, []);
 
   const fetchMessages = useCallback(async (sessionId) => {
