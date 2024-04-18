@@ -2,7 +2,7 @@
 import { useDispatch } from 'react-redux';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AuthService from '../services/AuthService';
-import { setUser } from '../store/actions/userActions';
+import { setUser, clearUser } from '../store/actions/userActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { GOOGLE_WEB_CLIENT_ID } from '../../credentials';
@@ -41,7 +41,19 @@ const useGoogleSignIn = () => {
     }
   };
 
-  return { googleSignIn };
+  const googleSignOut = async () => {
+    try {
+      await AsyncStorage.removeItem('userToken');
+      dispatch(clearUser());
+      await GoogleSignin.signOut();
+      return true;
+    } catch (error) {
+      console.error('Logout failed:', error);
+      return false;
+    }
+  };
+
+  return { googleSignIn, googleSignOut };
 };
 
 export default useGoogleSignIn;

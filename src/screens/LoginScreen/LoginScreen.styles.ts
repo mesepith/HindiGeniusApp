@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40, // Adjust this value as needed to slide down the button
+    marginTop: 200, // Adjust this value as needed to slide down the button
   },
   loadingContainer: {
     alignItems: 'center',
