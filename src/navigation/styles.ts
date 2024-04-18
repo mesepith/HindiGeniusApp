@@ -15,6 +15,15 @@ const styles = StyleSheet.create({
         color: 'gray',
         paddingTop: 5,
     },
+    bottomLogoContainer: {
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      logo: {
+        width: 100,
+        height: 100,
+      },
 });
 
 export default styles;

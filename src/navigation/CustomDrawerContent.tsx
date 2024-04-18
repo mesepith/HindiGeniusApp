@@ -1,10 +1,11 @@
 import React from 'react';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import styles from './styles';
 import useGoogleSignIn from '../hooks/useGoogleSignIn';  // Import the hook
+import logo from '../assets/logo.png'; // Import your logo image
 
 const CustomDrawerContent = (props) => {
 
@@ -24,6 +25,7 @@ const CustomDrawerContent = (props) => {
     };
 
     return (
+        <>
         <DrawerContentScrollView {...props}>
             {user && (
                 <View style={styles.userInfoSection}>
@@ -36,6 +38,14 @@ const CustomDrawerContent = (props) => {
                 <Button title="Logout" onPress={handleLogout} />
             </View>
         </DrawerContentScrollView>
+
+        {/* Logo at the bottom outside the ScrollView */}
+        <View style={styles.bottomLogoContainer}>
+            <Image source={logo} style={styles.logo} resizeMode="contain" />
+        </View>
+
+        </>
+        
     );
 };
 
