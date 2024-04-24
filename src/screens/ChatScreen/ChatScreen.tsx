@@ -17,7 +17,7 @@ const ChatScreen = ({navigation}) => {
     navigation.setOptions({
         headerRight: () => (
           <TouchableOpacity onPress={fetchSessionId} style={{ marginRight: 10 }}>
-            <Ionicons name="chatbubble-ellipses" size={25} color="#007AFF" />
+            <Ionicons name="add-sharp" size={25} color="#007AFF" />
           </TouchableOpacity>
         ),
     });
