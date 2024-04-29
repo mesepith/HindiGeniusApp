@@ -18,7 +18,7 @@ const CustomHeaderTitle = ({ title }) => {
           style={{ width: 40, height: 40 }} // Adjust the size as needed
           resizeMode="contain"
         />
-        <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 18 }}>
+        <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 18, color:'#000' }}>
           {title}
         </Text>
       </View>
