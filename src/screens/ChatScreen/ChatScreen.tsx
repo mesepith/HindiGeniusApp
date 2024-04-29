@@ -50,7 +50,7 @@ const ChatScreen = ({navigation}) => {
               style={styles.input}
               value={message}
               onChangeText={setMessage}
-              placeholder="Type your message..."
+              placeholder="Write a poem about Monsoon"
               onSubmitEditing={handleSendMessage}
               returnKeyType="send"
             />
