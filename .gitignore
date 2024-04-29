@@ -70,3 +70,4 @@ credentials.ts
 ios/HindiGeniusApp/GoogleService-Info.plist
 ios/HindiGeniusApp/Info.plist
 android/app/google-services.json
+android/gradle.properties
