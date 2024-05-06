@@ -21,7 +21,7 @@ const useChat = () => {
 
   const fetchSessionId = useCallback(async () => {
     
-    if (user && user.id && sessionId) {  // Make sure sessionId is not undefined
+    if (user && user.id) {  // Make sure sessionId is not undefined
       const token = await AsyncStorage.getItem('userToken');
       const newSessionId = await ChatService.startNewSession(token);
       setSessionId(newSessionId);  // Set the session ID first
