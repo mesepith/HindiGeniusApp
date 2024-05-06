@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/ApiConstants';
+import { Alert } from 'react-native'; // Import Alert
 
 interface Message {
   message: string;
@@ -16,8 +17,10 @@ const ChatService = {
         },
       });
       return response.data.messages;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching messages:', error);
+      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
+      Alert.alert("Fetch Messages Error", errorMessage);
       throw error;
     }
   },
@@ -37,8 +40,10 @@ const ChatService = {
         }
       );
       return response.data.response;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error);
+      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
+      Alert.alert("Send Message Error", errorMessage);
       throw error;
     }
   },
@@ -50,8 +55,10 @@ const ChatService = {
         });
         console.log('startNewSession sessionId ', response.data.sessionId);
         return response.data.sessionId;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error starting new session:', error);
+        const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
+        Alert.alert("Start New Session Error", errorMessage);
         throw error;
     }
 },

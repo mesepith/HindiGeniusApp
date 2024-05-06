@@ -71,3 +71,6 @@ ios/HindiGeniusApp/GoogleService-Info.plist
 ios/HindiGeniusApp/Info.plist
 android/app/google-services.json
 android/gradle.properties
+
+#Url detail
+src/utils/ApiConstants.ts
