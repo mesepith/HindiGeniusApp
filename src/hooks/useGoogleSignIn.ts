@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { GOOGLE_WEB_CLIENT_ID } from '../../credentials';
 import { Alert } from 'react-native';  // Import Alert if not already imported
+import { setCustomUserId } from 'react-native-clarity';  // Ensure setUserId is imported
 
 const useGoogleSignIn = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const useGoogleSignIn = () => {
       if (response.success) {
         await AsyncStorage.setItem('userToken', response.token);
         dispatch(setUser(response.user));
+        setCustomUserId(userInfo.user.id);  // Set Clarity user ID after successful login
         return { success: true };
       } else {
         Alert.alert('Sign In Failed', response.data.message); // Display the error message from the server
