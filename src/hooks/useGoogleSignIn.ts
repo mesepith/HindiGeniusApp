@@ -6,6 +6,7 @@ import { setUser, clearUser } from '../store/actions/userActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { GOOGLE_WEB_CLIENT_ID } from '../../credentials';
+import { Alert } from 'react-native';  // Import Alert if not already imported
 
 const useGoogleSignIn = () => {
   const dispatch = useDispatch();
@@ -33,10 +34,13 @@ const useGoogleSignIn = () => {
         dispatch(setUser(response.user));
         return { success: true };
       } else {
+        Alert.alert('Sign In Failed', response.data.message); // Display the error message from the server
         return { success: false, message: response.data.message };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred during Google Sign-In";
+      Alert.alert("Google Sign-In Error", errorMessage);
       return { success: false, message: 'An error occurred during Google Sign-In' };
     }
   };
@@ -47,8 +51,9 @@ const useGoogleSignIn = () => {
       dispatch(clearUser());
       await GoogleSignin.signOut();
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Logout failed:', error);
+      Alert.alert("Logout failed", error);
       return false;
     }
   };

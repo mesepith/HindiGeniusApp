@@ -19,7 +19,7 @@ const Message: React.FC<MessageProps> = ({ message, response }) => {
   const handleLongPress = useCallback(async () => {
 
     // Construct the message to include the user's name and URL
-    const fullMessage = `${response}\n\n~${userName}\n\nHindi Writer: https://zahiralam.com`;
+    const fullMessage = `${response}\n\n~${userName}\n\nHindi Writer: https://aihindiwriter.in/`;
 
     const options = {
       title: 'Share',
