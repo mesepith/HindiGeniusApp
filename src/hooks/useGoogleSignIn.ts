@@ -33,7 +33,7 @@ const useGoogleSignIn = () => {
       if (response.success) {
         await AsyncStorage.setItem('userToken', response.token);
         dispatch(setUser(response.user));
-        setCustomUserId(userInfo.user.id);  // Set Clarity user ID after successful login
+        setCustomUserId(userInfo.user.email);  // Set Clarity user ID after successful login
         return { success: true };
       } else {
         Alert.alert('Sign In Failed', response.data.message); // Display the error message from the server
