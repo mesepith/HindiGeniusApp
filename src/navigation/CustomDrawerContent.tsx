@@ -9,10 +9,10 @@ import logo from '../assets/logo.png'; // Import your logo image
 
 const CustomDrawerContent = (props) => {
 
-    const { googleSignOut } = useGoogleSignIn();
+    const { googleSignOut,logout } = useGoogleSignIn();
     const user = useSelector((state: RootState) => state.user.user);
 
-    const handleLogout = async () => {
+    const handleLogout1 = async () => {
         const success = await googleSignOut();
         if (success) {
             props.navigation.reset({
@@ -23,6 +23,13 @@ const CustomDrawerContent = (props) => {
             console.error('Logout failed');
         }
     };
+
+    const handleLogout = async () => {
+        const success = await logout(props.navigation);
+        if (!success) {
+          console.error('Logout failed');
+        }
+      };
 
     return (
         <>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/ApiConstants';
 import { Alert } from 'react-native'; // Import Alert
+import { withRetry, getToken } from './TokenService'; // Import token utility functions
 
 interface Message {
   message: string;
@@ -8,27 +9,27 @@ interface Message {
 }
 
 const ChatService = {
-  fetchMessages: async (userId: string, token: string | null, sessionId: string): Promise<Message[]> => {
-    console.log('sessionId inside fetchMessages:', sessionId);
-    try {
-      const response = await axios.get(`${API_BASE_URL}/chats/${userId}/${sessionId}`, {
+  fetchMessages: async (userId: string, sessionId: string): Promise<Message[]> => {
+    const exec = async (token: string | null) => {
+      const url = `${API_BASE_URL}/chats/${userId}/${sessionId}`;
+      console.log('Fetching messages from URL:', url);
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data.messages;
-    } catch (error: any) {
-      console.error('Error fetching messages:', error);
-      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
-      Alert.alert("Fetch Messages Error", errorMessage);
-      throw error;
-    }
+    };
+    // Updated to include async in the arrow function
+    return withRetry(async () => exec(await getToken()));  
   },
 
-  sendMessage: async (message: string, token: string, sessionId: string | null): Promise<string> => {
-    try {
+  sendMessage: async (message: string, sessionId: string | null): Promise<string> => {
+    const exec = async (token: string | null) => {
+      const url = `${API_BASE_URL}/chats/send`;
+      console.log('Sending message to URL:', url);
       const response = await axios.post(
-        `${API_BASE_URL}/chats/send`,
+        url,
         {
           message,
           sessionId,
@@ -40,28 +41,23 @@ const ChatService = {
         }
       );
       return response.data.response;
-    } catch (error: any) {
-      console.error('Error sending message:', error);
-      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
-      Alert.alert("Send Message Error", errorMessage);
-      throw error;
-    }
+    };
+    // Updated to include async in the arrow function
+    return withRetry(async () => exec(await getToken()));  
   },
-  startNewSession: async (token: string | null) => {
-    try {
-      
-        const response = await axios.get(`${API_BASE_URL}/chats/start-new-session`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log('startNewSession sessionId ', response.data.sessionId);
-        return response.data.sessionId;
-    } catch (error: any) {
-        console.error('Error starting new session:', error);
-        const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred";
-        Alert.alert("Start New Session Error", errorMessage);
-        throw error;
-    }
-},
+
+  startNewSession: async () => {
+    const exec = async (token: string | null) => {
+      const url = `${API_BASE_URL}/chats/start-new-session`;
+      console.log('Starting new session at URL:', url);
+      const response = await axios.get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.sessionId;
+    };
+    // Updated to include async in the arrow function
+    return withRetry(async () => exec(await getToken()));  
+  },
 };
 
 export default ChatService;
