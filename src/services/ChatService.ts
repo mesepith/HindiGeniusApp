@@ -28,19 +28,25 @@ const ChatService = {
     const exec = async (token: string | null) => {
       const url = `${API_BASE_URL}/chats/send`;
       console.log('Sending message to URL:', url);
-      const response = await axios.post(
-        url,
-        {
-          message,
-          sessionId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      // try {
+        const response = await axios.post(
+          url,
+          {
+            message,
+            sessionId,
           },
-        }
-      );
-      return response.data.response;
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log('response.data.response in sendMessage +++++++++++++', response.data.response);
+        return response.data.response;
+      // } catch (error) {
+      //   console.error("Error sending message:", error);
+      //   return false;  // Return undefined or throw an error
+      // }
     };
     // Updated to include async in the arrow function
     return withRetry(async () => exec(await getToken()));  

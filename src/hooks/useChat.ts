@@ -73,14 +73,20 @@ const useChat = () => {
     setIsLoading(true);
     try {
       const response = await ChatService.sendMessage(message, sessionId);
+      console.log('user inside handleSendMessage, ', user);
+      console.log('response msg, ', response);
       setMessages(currentMessages => [...currentMessages, { message, response }]);
       setMessage('');
       setTimeout(() => {
-        if (response.length > 300 && flatListRef.current) {
-          const index = messages.length; // Index of the new message
-          flatListRef.current.scrollToIndex({ index, animated: true, viewPosition: 0 });
-        } else {
-          flatListRef.current?.scrollToEnd({ animated: true });
+        if (response !==undefined) {
+          console.log('response inside setTimeout, ', response);
+          console.log('i m here -----')
+          if (response.length > 300 && flatListRef.current) {
+            const index = messages.length; // Index of the new message
+            flatListRef.current.scrollToIndex({ index, animated: true, viewPosition: 0 });
+          } else {
+            flatListRef.current?.scrollToEnd({ animated: true });
+          }
         }
       }, 100);
     } catch (error: any) {

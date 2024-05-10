@@ -2,6 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from '../utils/ApiConstants';
 import { Alert } from 'react-native'; // Import Alert
+import store from '../store/store';  // Import the Redux store directly if not passing dispatch through components
+import { triggerLogout } from '../store/actions/userActions'; 
 
 export const getToken = async () => {
   const token = await AsyncStorage.getItem('userToken');
@@ -61,7 +63,8 @@ export const withRetry = async (apiCall, initialToken) => {
 
         if (refreshError.message === 'UnauthorizedError' ) {
 
-          Alert.alert("You are logout", "Login Please");
+          // Alert.alert("You are logout", "Login Please");
+          store.dispatch(triggerLogout());  // Use the store to dispatch an action directly
 
         }else{
           console.log('Failed to refresh token withRetry:', refreshError);

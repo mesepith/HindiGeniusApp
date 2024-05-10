@@ -1,5 +1,6 @@
 const initialState = {
     user: null,
+    triggerLogout: false,
 };
   
   const userReducer = (state = initialState, action: { type: string; payload: any; }) => {
@@ -8,6 +9,12 @@ const initialState = {
         return {
           ...state,
           user: action.payload,
+          triggerLogout: false,  // Reset on setting user
+        };
+      case 'TRIGGER_LOGOUT':
+        return {
+          ...state,
+          triggerLogout: true,  // Set triggerLogout to true to initiate logout in component
         };
       case 'CLEAR_USER':
         return {
