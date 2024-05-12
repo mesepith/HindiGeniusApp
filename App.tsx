@@ -7,7 +7,7 @@ import { initialize } from 'react-native-clarity';
 import LogoutHandler from './src/components/LogoutHandler';  // Import the new component
 import LoadingScreen from './src/screens/LoadingScreen';
 import { isUserAuthenticated } from './src/utils/authUtils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initMessaging } from './src/services/NotificationService';
 
 
 const App = () => {
@@ -17,6 +17,7 @@ const App = () => {
 
   useEffect(() => {
     initialize('m8d14bf6ev');
+    initMessaging();  // Initialize messaging service
 
     const checkAuthentication = async () => {
       const authenticated = await isUserAuthenticated();
