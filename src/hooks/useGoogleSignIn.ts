@@ -36,6 +36,7 @@
           await AsyncStorage.setItem('userToken', response.accessToken); // Store access token
           await AsyncStorage.setItem('refreshToken', response.refreshToken); // Store refresh token
           await AsyncStorage.setItem('userId', String(response.user.id));
+          await AsyncStorage.setItem('user', JSON.stringify(response.user));
           dispatch(setUser(response.user));
           setCustomUserId(userInfo.user.email);  // Set Clarity user ID after successful login
           return { success: true };
@@ -56,6 +57,7 @@
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('refreshToken');
         await AsyncStorage.removeItem('userId');
+        await AsyncStorage.removeItem('user');
         dispatch(clearUser());
         await GoogleSignin.signOut();
         return true;
@@ -69,7 +71,7 @@
     const logout = async () => {
       try {
         await GoogleSignin.signOut(); // Ensures Google sign out
-        await AsyncStorage.multiRemove(['userToken', 'refreshToken', 'userId']); // Removes all keys at once
+        await AsyncStorage.multiRemove(['userToken', 'refreshToken', 'userId', 'user']); // Removes all keys at once
         dispatch(clearUser());
         navigation.reset({
           index: 0,

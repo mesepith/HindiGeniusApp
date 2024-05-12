@@ -27,7 +27,6 @@ const ChatService = {
   sendMessage: async (message: string, sessionId: string | null): Promise<string> => {
     const exec = async (token: string | null) => {
       const url = `${API_BASE_URL}/chats/send`;
-      console.log('Sending message to URL:', url);
       // try {
         const response = await axios.post(
           url,
@@ -41,7 +40,6 @@ const ChatService = {
             },
           }
         );
-        console.log('response.data.response in sendMessage +++++++++++++', response.data.response);
         return response.data.response;
       // } catch (error) {
       //   console.error("Error sending message:", error);

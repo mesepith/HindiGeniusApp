@@ -5,11 +5,11 @@ import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
 
-const StackNavigator = () => (
-    <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={DrawerNavigator} options={{ headerShown: false }} />
+const StackNavigator = ({ initialRouteName }) => (
+    <Stack.Navigator initialRouteName={initialRouteName}>
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={DrawerNavigator} options={{ headerShown: false }} />
     </Stack.Navigator>
-);
+  );
 
 export default StackNavigator;
