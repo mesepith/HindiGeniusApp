@@ -3,11 +3,10 @@ import { Provider } from 'react-redux';
 import store from './src/store/store';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigator from './src/navigation/StackNavigator';  // Updated import
-import { initialize } from 'react-native-clarity';
 import LogoutHandler from './src/components/LogoutHandler';  // Import the new component
 import LoadingScreen from './src/screens/LoadingScreen';
 import { isUserAuthenticated } from './src/utils/authUtils';
-import { initMessaging } from './src/services/NotificationService';
+import { Platform } from 'react-native';
 
 
 const App = () => {
@@ -16,8 +15,14 @@ const App = () => {
   const [isReady, setIsReady] = useState(false); // State to manage the readiness of the app to be rendered
 
   useEffect(() => {
-    initialize('m8d14bf6ev');
-    initMessaging();  // Initialize messaging service
+
+    if (Platform.OS === 'android') {
+      const { initialize } = require('react-native-clarity');
+      initialize('m8d14bf6ev');
+
+      const { initMessaging } = require('./src/services/NotificationService');
+      initMessaging();  // Initialize messaging service only for Android
+    }
 
     const checkAuthentication = async () => {
       const authenticated = await isUserAuthenticated();
