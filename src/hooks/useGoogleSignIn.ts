@@ -6,8 +6,7 @@
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import { useEffect } from 'react';
   import { GOOGLE_WEB_CLIENT_ID } from '../../credentials';
-  import { Alert } from 'react-native';  // Import Alert if not already imported
-  import { setCustomUserId } from 'react-native-clarity';  // Ensure setUserId is imported
+  import { Alert, Platform } from 'react-native';  // Import Alert if not already imported
   import { useNavigation } from '@react-navigation/native';
 
   const useGoogleSignIn = () => {
@@ -38,7 +37,12 @@
           await AsyncStorage.setItem('userId', String(response.user.id));
           await AsyncStorage.setItem('user', JSON.stringify(response.user));
           dispatch(setUser(response.user));
-          setCustomUserId(userInfo.user.email);  // Set Clarity user ID after successful login
+
+          if (Platform.OS === 'android') {
+            const { setCustomUserId } = require('react-native-clarity');
+            setCustomUserId(userInfo.user.email);  // Set Clarity user ID after successful login
+          }
+          
           return { success: true };
         } else {
           Alert.alert('Sign In Failed', response.data.message); // Display the error message from the server
